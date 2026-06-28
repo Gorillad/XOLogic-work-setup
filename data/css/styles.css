@@ -694,6 +694,7 @@ nav ul li a {
 main-head {
 	position: relative;
 	z-index: 10001;
+	overflow: visible;
 }
 .header {
   background-color: #fff;

@@ -10,6 +10,8 @@
   --xo-border: #e8edf2;
   --xo-panel: #ffffff;
   --xo-panel-soft: #faf7f2;
+  --xo-mega-max-width: min(1080px, calc(100vw - 32px));
+  --xo-mega-max-height: calc(100dvh - 220px);
   --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -17,6 +19,7 @@
   z-index: 10001;
   background: #ffffff;
   border-bottom: 1px solid var(--xo-border);
+  overflow: visible;
 }
 
 .sb-menu {
@@ -25,8 +28,9 @@
   justify-content: center;
   align-items: stretch;
   gap: 0.35rem;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  max-width: 1600px;
   list-style: none;
   font-family: var(--font-body);
   border: none;
@@ -34,12 +38,7 @@
 
 .sb-menu > li {
   list-style: none;
-  position: relative;
-}
-
-.sb-menu > li:hover,
-.sb-menu > li:focus-within {
-  z-index: 99999;
+  position: static;
 }
 
 .sb-menu > li > a {
@@ -79,6 +78,11 @@
   transform: scaleX(1);
 }
 
+/* Mega items: panel already has gold top border — skip link underline */
+.sb-menu > li:has(.sb-mega-menu) > a::after {
+  display: none;
+}
+
 /* Subtle chevron on items with a panel */
 .sb-menu > li:has(.sb-mega-menu) > a {
   padding-right: 2.15rem;
@@ -109,16 +113,24 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  width: min(1080px, calc(100vw - 40px));
-  margin: 0 0 12px;
+  right: auto;
+  transform: translateX(-50%) translateY(8px);
+  width: var(--xo-mega-max-width);
+  max-width: var(--xo-mega-max-width);
+  max-height: var(--xo-mega-max-height);
+  margin: 0;
   padding: 1.5rem 1.75rem 2rem;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
+  align-content: flex-start;
   gap: 0.25rem 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--xo-panel);
   border: 1px solid var(--xo-border);
   border-top: 3px solid var(--xo-gold);
@@ -144,9 +156,9 @@
   pointer-events: auto;
 }
 
-/* Keep link columns + promo CTA on one row */
+/* Keep link columns + promo CTA on one row when there is room */
 .sb-mega-menu:has(.sb-promo-card) {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: flex-start;
 }
 
@@ -255,10 +267,10 @@
 
 /* Promo CTA card — full-height right rail */
 .sb-col-image.sb-promo-card {
-  flex: 0 0 210px;
+  flex: 1 1 210px;
   width: 210px;
   max-width: 210px;
-  min-width: 210px;
+  min-width: min(210px, 100%);
   margin-left: auto;
   align-self: flex-start;
   padding: 0.1rem 0 0 1rem !important;
@@ -405,6 +417,12 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .sb-mega-menu:has(.sb-promo-card) {
+    flex-wrap: nowrap;
+  }
+}
+
 @media (min-width: 1024px) and (max-width: 1366px) {
   .sb-menu > li > a {
     padding: 0.65rem 1.15rem 0.75rem;
@@ -421,7 +439,8 @@
   }
 
   .sb-mega-menu {
-    width: calc(100vw - 28px);
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
     padding: 1.25rem 1.35rem 1.65rem;
   }
 
